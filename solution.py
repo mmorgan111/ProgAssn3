@@ -58,7 +58,7 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
             sendTime = struct.unpack("d", recPacket[28:28 + numberofBytes])[0]
             roundTrip = timeReceived - sendTime
             timeToLive = struct.unpack("d", recPacket[28:28 + numberofBytes])[0]
-            return (roundTrip, timeToLive)
+            return roundTrip, timeToLive
 
 
 
@@ -123,8 +123,9 @@ def ping(host, timeout=1):
     # Add something here to collect the delays of each ping in a list so you can calculate vars after your ping
 
     for i in range(0, 4):  # Four pings will be sent (loop runs for i=0, 1, 2, 3)
+        number = 36.00
         delay, statistics = doOnePing(dest, timeout)  # what is stored into delay and statistics?
-        response = response.append({'bytes': str(round(delay, 2)), 'rtt': str(round(timeout, 2)), 'ttl': str(round(statistics, 2))}, ignore_index=True)
+        response = response.append({'bytes': str(round(number, 2)), 'rtt': str(round(delay, 2)), 'ttl': str(round(statistics, 2))}, ignore_index=True)
         # store your bytes, rtt, and ttle here in your response pandas dataframe. An example is commented out below for vars
         print(response)
         time.sleep(1)  # wait one second
@@ -141,6 +142,7 @@ def ping(host, timeout=1):
 
     # You should have the values of delay for each ping here structured in a pandas dataframe;
     # fill in calculation for packet_min, packet_avg, packet_max, and stdev
+
     vars = pd.DataFrame(columns=['min', 'avg', 'max', 'stddev'])
     vars = vars.append({'min': str(round(response['rtt'].min(), 2)), 'avg': str(round(response['rtt'].mean(), 2)),
                         'max': str(round(response['rtt'].max(), 2)), 'stddev': str(round(response['rtt'].std(), 2))},
