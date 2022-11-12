@@ -129,24 +129,24 @@ def ping(host, timeout=1):
         print(response)
         time.sleep(1)  # wait one second
 
-    packet_lost = 0
+    '''packet_lost = 0
     packet_recv = 0
     # fill in start. UPDATE THE QUESTION MARKS
     for index, row in response.iterrows():
         if len(response[index]) == 0:  # access your response df to determine if you received a packet or not
-            packet_lost  += 1 # ????
+            packet_lost += 1  # ????
         else:
-            packet_recv += 1 # ????
-    # fill in end
+            packet_recv += 1  # ????
+    # fill in end'''
 
     # You should have the values of delay for each ping here structured in a pandas dataframe;
     # fill in calculation for packet_min, packet_avg, packet_max, and stdev
-        vars = pd.DataFrame(columns=['min', 'avg', 'max', 'stddev'])
-        vars = vars.append({'min': str(round(response['rtt'].min(), 2)), 'avg': str(round(response['rtt'].mean(), 2)),
+    vars = pd.DataFrame(columns=['min', 'avg', 'max', 'stddev'])
+    vars = vars.append({'min': str(round(response['rtt'].min(), 2)), 'avg': str(round(response['rtt'].mean(), 2)),
                         'max': str(round(response['rtt'].max(), 2)), 'stddev': str(round(response['rtt'].std(), 2))},
                        ignore_index=True)
-        print(vars)  # make sure your vars data you are returning resembles acceptance criteria
-        return vars
+    print(vars)  # make sure your vars data you are returning resembles acceptance criteria
+    return vars
 
 
 if __name__ == '__main__':
