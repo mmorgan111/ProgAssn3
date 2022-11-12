@@ -124,19 +124,19 @@ def ping(host, timeout=1):
 
     for i in range(0, 4):  # Four pings will be sent (loop runs for i=0, 1, 2, 3)
         delay, statistics = doOnePing(dest, timeout)  # what is stored into delay and statistics?
-        response = response.append({'bytes': delay, 'rtt': timeout, 'ttl': statistics})
+        response = response.append({'bytes': delay, 'rtt': timeout,'ttl': statistics})
         # store your bytes, rtt, and ttle here in your response pandas dataframe. An example is commented out below for vars
         print(delay)
         time.sleep(1)  # wait one second
 
-    #packet_lost = 0
-    #packet_recv = 0
+    packet_lost = 0
+    packet_recv = 0
     # fill in start. UPDATE THE QUESTION MARKS
-    #for index, row in response.iterrows():
-        #if len(response) == 0:  # access your response df to determine if you received a packet or not
-            #packet_lost =  # ????
-        #else:
-            #packet_recv =  # ????
+    for index, row in response.iterrows():
+        if len(index) == 0:  # access your response df to determine if you received a packet or not
+            packet_lost  += 1 # ????
+        else:
+            packet_recv += 1 # ????
     # fill in end
 
     # You should have the values of delay for each ping here structured in a pandas dataframe;
