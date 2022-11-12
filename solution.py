@@ -133,7 +133,7 @@ def ping(host, timeout=1):
     packet_recv = 0
     # fill in start. UPDATE THE QUESTION MARKS
     for index, row in response.iterrows():
-        if len(response) == 0:  # access your response df to determine if you received a packet or not
+        if len(response[index]) == 0:  # access your response df to determine if you received a packet or not
             packet_lost  += 1 # ????
         else:
             packet_recv += 1 # ????
