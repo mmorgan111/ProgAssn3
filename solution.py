@@ -55,10 +55,10 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
 
         if id == ID and type != 8:
             numberOfBytes = struct.calcsize("d")
-            sendTime = struct.unpack("d", recPacket[28:28 + numberofBytes])[0]
+            sendTime = struct.unpack("d", recPacket[28:28 + numberOfBytes])[0]
             roundTrip = timeReceived - sendTime
-            timeToLive = struct.unpack("d", recPacket[28:28 + numberofBytes])[0]
-            return roundTrip, timeToLive, numberOfBytes
+            timeToLive = struct.unpack("d", recPacket[28:28 + numberOfBytes])[0]
+            return roundTrip, timeToLive
 
 
 
@@ -123,8 +123,8 @@ def ping(host, timeout=1):
     # Add something here to collect the delays of each ping in a list so you can calculate vars after your ping
 
     for i in range(0, 4):  # Four pings will be sent (loop runs for i=0, 1, 2, 3)
-        delay, statistics, numbersbytes = doOnePing(dest, timeout)  # what is stored into delay and statistics?
-        response = response.append({'bytes': str(round(numbersbytes, 2)), 'rtt': str(round(delay, 2)), 'ttl': str(round(statistics/1000000, 2))}, ignore_index=True)
+        delay, statistics = doOnePing(dest, timeout)  # what is stored into delay and statistics?
+        response = response.append({'bytes': str(round(struct.calcsize("d"), 2)), 'rtt': str(round(delay, 2)), 'ttl': str(round(statistics/1000000, 2))}, ignore_index=True)
         # store your bytes, rtt, and ttle here in your response pandas dataframe. An example is commented out below for vars
         print(response)
         time.sleep(1)  # wait one second
