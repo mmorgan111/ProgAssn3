@@ -54,11 +54,11 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
         req, code, checksum, id, seq = struct.unpack('bbHHh', icmpHeader)
 
         if id == ID and type != 8:
-            numberofBytes = struct.calcsize("d")
+            numberOfBytes = struct.calcsize("d")
             sendTime = struct.unpack("d", recPacket[28:28 + numberofBytes])[0]
             roundTrip = timeReceived - sendTime
             timeToLive = struct.unpack("d", recPacket[28:28 + numberofBytes])[0]
-            return roundTrip, timeToLive
+            return roundTrip, timeToLive, numberOfBytes
 
 
 
@@ -123,9 +123,8 @@ def ping(host, timeout=1):
     # Add something here to collect the delays of each ping in a list so you can calculate vars after your ping
 
     for i in range(0, 4):  # Four pings will be sent (loop runs for i=0, 1, 2, 3)
-        number = 36.00
-        delay, statistics = doOnePing(dest, timeout)  # what is stored into delay and statistics?
-        response = response.append({'bytes': str(round(number, 2)), 'rtt': str(round(delay, 2)), 'ttl': str(round(statistics, 2))}, ignore_index=True)
+        delay, statistics, numbersbytes = doOnePing(dest, timeout)  # what is stored into delay and statistics?
+        response = response.append({'bytes': str(round(numbersbytes, 2)), 'rtt': str(round(delay, 2)), 'ttl': str(round(statistics/1000000, 2))}, ignore_index=True)
         # store your bytes, rtt, and ttle here in your response pandas dataframe. An example is commented out below for vars
         print(response)
         time.sleep(1)  # wait one second
@@ -134,7 +133,7 @@ def ping(host, timeout=1):
     packet_recv = 0
     # fill in start. UPDATE THE QUESTION MARKS
     for index, row in response.iterrows():
-        if len(response[index]) == 0:  # access your response df to determine if you received a packet or not
+        if len(response[index, row]) == 0:  # access your response df to determine if you received a packet or not
             packet_lost += 1  # ????
         else:
             packet_recv += 1  # ????
