@@ -50,6 +50,18 @@ def receiveOnePing(mySocket, ID, timeout, destAddr):
 
         # Fetch the ICMP header from the IP packet
         icmpHeader = recPacket[20:28]
+
+        req, code, checksum, id, seq = struct.unpack('bbHHh', icmpHeader)
+
+        if id == ID and type != 8:
+            bytes = struct.calcsize("d")
+            sendTime = struct.unpack("d", recPacket[28:28 + bytes])[0]
+            rtt = timeReceived - sendTime
+            ttls = struct.unpack("d", recPacket[28:28 + bytes])[0]
+            return (rtt, ttls)
+
+
+
         # Fill in end
         timeLeft = timeLeft - howLongInSelect
         if timeLeft <= 0:
@@ -112,28 +124,31 @@ def ping(host, timeout=1):
 
     for i in range(0, 4):  # Four pings will be sent (loop runs for i=0, 1, 2, 3)
         delay, statistics = doOnePing(dest, timeout)  # what is stored into delay and statistics?
-        response =  # store your bytes, rtt, and ttle here in your response pandas dataframe. An example is commented out below for vars
+        response = response.append({'min': str(round(response['rtt'].min(), 2)), 'avg': str(round(response['rtt'].mean(), 2)),
+                        'max': str(round(response['rtt'].max(), 2)), 'stddev': str(round(response['rtt'].std(), 2))},
+                                   ignore_index=True)
+        # store your bytes, rtt, and ttle here in your response pandas dataframe. An example is commented out below for vars
         print(delay)
         time.sleep(1)  # wait one second
-
+'''
     packet_lost = 0
     packet_recv = 0
     # fill in start. UPDATE THE QUESTION MARKS
-    '''for index, row in response.iterrows():
+    for index, row in response.iterrows():
         if ???? == 0:  # access your response df to determine if you received a packet or not
             packet_lost =  # ????
         else:
             packet_recv =  # ????
     # fill in end
-    '''
+'''
     # You should have the values of delay for each ping here structured in a pandas dataframe;
     # fill in calculation for packet_min, packet_avg, packet_max, and stdev
-    vars = pd.DataFrame(columns=['min', 'avg', 'max', 'stddev'])
+"""    vars = pd.DataFrame(columns=['min', 'avg', 'max', 'stddev'])
     vars = vars.append({'min': str(round(response['rtt'].min(), 2)), 'avg': str(round(response['rtt'].mean(), 2)),
                         'max': str(round(response['rtt'].max(), 2)), 'stddev': str(round(response['rtt'].std(), 2))},
                        ignore_index=True)
     print(vars)  # make sure your vars data you are returning resembles acceptance criteria
-    return vars
+    return vars"""
 
 
 if __name__ == '__main__':
